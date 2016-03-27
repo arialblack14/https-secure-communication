@@ -36,16 +36,18 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(passport.initialize());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Secure traffic only
-app.all('*', function(req, res, next) {
-  console.log('req start: ', req.secure, req.hostname, req.url, app.get('port'));
+app.all('*', function(req, res, next){
+    console.log('req start: ',req.secure, req.hostname, req.url, app.get('port'));
   if (req.secure) {
     return next();
   }
-  res.redirect('https://' + req.hostname + ':' + app.get('secPort') + req.url);
+
+ res.redirect('https://'+req.hostname+':'+app.get('secPort')+req.url);
 });
 
 app.use('/', routes);
